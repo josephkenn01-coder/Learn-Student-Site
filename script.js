@@ -1,39 +1,90 @@
-/* Save as: style.css */
-display:flex;
-align-items:center;
-justify-content:center;
-padding:2rem;
-}
-.container{width:100%;max-width:860px}
-.brand{text-align:center;margin-bottom:1rem}
-.brand h1{margin:.2rem 0;font-size:1.6rem}
-.muted{color:var(--muted)}
-.card{
-background:var(--card);
-border-radius:var(--radius);
-padding:1rem 1.25rem;
-box-shadow:0 6px 20px rgba(20,20,50,0.08);
-margin-bottom:1rem;
-}
-form.card{padding:1.25rem}
-.field{margin-bottom:0.85rem}
-.field label{display:block;font-weight:600;margin-bottom:.25rem}
-.field input{width:100%;padding:.6rem .75rem;border-radius:8px;border:1px solid #e6e9f2;font-size:0.95rem}
-.field input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(91,108,255,0.08)}
-.password-row{display:flex;gap:.5rem}
-.password-row input{flex:1}
-.password-row button{border:1px solid #e6e9f2;padding:.45rem .6rem;background:transparent;border-radius:8px;cursor:pointer}
-meter{width:100%;height:8px;border-radius:6px;margin-top:.45rem}
-.actions{text-align:right;margin-top:.5rem}
-button[type="submit"]{background:var(--accent);color:white;padding:.6rem .9rem;border:none;border-radius:10px;cursor:pointer;font-weight:600}
-button[disabled]{opacity:.6;cursor:not-allowed}
-.error{color:var(--danger);display:block;height:1rem;font-size:.85rem}
-.info.card{padding:1rem}
-.foot{text-align:center;font-size:.85rem;margin-top:.5rem}
-#notice{margin-top:.5rem}
+// script.js
+const BACKEND_URL = "https://learn-student-site-backend.onrender.com/api/signup";
 
-
-@media (max-width:520px){
-body{padding:1rem}
-.brand h1{font-size:1.2rem}
+function showNotice(text, ok = true) {
+  const n = document.getElementById('notice');
+  n.textContent = text;
+  n.style.color = ok ? 'green' : 'red';
 }
+
+const form = document.getElementById('signupForm');
+const fullname = document.getElementById('fullname');
+const email = document.getElementById('email');
+const password = document.getElementById('password');
+const confirm = document.getElementById('confirm');
+const toggle = document.getElementById('togglePwd');
+const submitBtn = document.getElementById('submitBtn');
+const pwdStrength = document.getElementById('pwdStrength');
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function scorePassword(pwd) {
+  let score = 0;
+  if (pwd.length >= 8) score++;
+  if (/[A-Z]/.test(pwd) && /[a-z]/.test(pwd)) score++;
+  if (/\d/.test(pwd)) score++;
+  if (/[^A-Za-z0-9]/.test(pwd)) score++;
+  return score;
+}
+
+function setError(fieldName, message) {
+  const el = document.querySelector(`small.error[data-for="${fieldName}"]`);
+  if (el) el.textContent = message || '';
+}
+
+function clearErrors() {
+  document.querySelectorAll('small.error').forEach(s => s.textContent = '');
+}
+
+password.addEventListener('input', () => {
+  pwdStrength.value = scorePassword(password.value);
+});
+
+toggle.addEventListener('click', () => {
+  const t = password.type === 'password' ? 'text' : 'password';
+  password.type = t; confirm.type = t;
+});
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  clearErrors();
+  showNotice('');
+
+  const nameVal = fullname.value.trim();
+  const emailVal = email.value.trim().toLowerCase();
+  const pwd = password.value;
+  const conf = confirm.value;
+  let valid = true;
+
+  if (nameVal.length < 2) { setError('fullname', 'Enter your full name'); valid = false; }
+  if (!emailRegex.test(emailVal)) { setError('email', 'Invalid email'); valid = false; }
+  if (pwd.length < 8) { setError('password', 'Minimum 8 characters'); valid = false; }
+  if (pwd !== conf) { setError('confirm', 'Passwords do not match'); valid = false; }
+
+  if (!valid) return;
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Creating...';
+
+  try {
+    const res = await fetch(BACKEND_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: nameVal, email: emailVal, password: pwd })
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      showNotice(data.message || 'Account created successfully!');
+      form.reset();
+      pwdStrength.value = 0;
+    } else {
+      showNotice(data.message || 'Signup failed', false);
+    }
+  } catch (err) {
+    console.error(err);
+    showNotice('Network error. Please try again later.', false);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Create account';
+  }
+});
