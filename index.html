@@ -3,54 +3,40 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Student Signup — Learn Student Site</title>
+  <title>Learn Student Site</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <main class="container">
     <header class="brand">
-      <h1>Student Signup</h1>
-      <p class="muted">Create an account to access your courses</p>
+      <h1>Learn Student Site</h1>
     </header>
 
-    <form id="signupForm" class="card" autocomplete="on" novalidate>
-      <div class="field">
-        <label for="fullname">Full name</label>
-        <input id="fullname" name="fullname" type="text" required minlength="2" placeholder="Jane Doe" />
-        <small class="error" data-for="fullname"></small>
+    <div id="authContainer">
+      <div id="signupForm" class="card authForm active">
+        <h2>Create Account</h2>
+        <input id="suName" placeholder="Full Name" />
+        <input id="suEmail" placeholder="Email Address" />
+        <input id="suPassword" type="password" placeholder="Password" />
+        <button id="signupBtn">Sign Up</button>
+        <p class="switch">Already have an account? <a href="#" id="showSignin">Sign In</a></p>
       </div>
 
-      <div class="field">
-        <label for="email">Email address</label>
-        <input id="email" name="email" type="email" required placeholder="you@example.com" />
-        <small class="error" data-for="email"></small>
+      <div id="signinForm" class="card authForm">
+        <h2>Welcome Back</h2>
+        <input id="siEmail" placeholder="Email Address" />
+        <input id="siPassword" type="password" placeholder="Password" />
+        <button id="signinBtn">Sign In</button>
+        <p class="switch">Don't have an account? <a href="#" id="showSignup">Sign Up</a></p>
       </div>
 
-      <div class="field">
-        <label for="password">Password</label>
-        <div class="password-row">
-          <input id="password" name="password" type="password" required minlength="8" placeholder="At least 8 characters" />
-          <button type="button" id="togglePwd" aria-label="Show password">👁️</button>
-        </div>
-        <meter id="pwdStrength" min="0" max="4" value="0"></meter>
-        <small class="muted">Use letters, numbers &amp; symbols.</small>
-        <small class="error" data-for="password"></small>
+      <div id="welcomeScreen" class="card" style="display:none;">
+        <h2 id="welcomeMsg"></h2>
+        <button id="logoutBtn">Log Out</button>
       </div>
+    </div>
 
-      <div class="field">
-        <label for="confirm">Confirm password</label>
-        <input id="confirm" name="confirm" type="password" required placeholder="Repeat password" />
-        <small class="error" data-for="confirm"></small>
-      </div>
-
-      <div class="actions">
-        <button id="submitBtn" type="submit">Create account</button>
-      </div>
-
-      <div id="notice" role="status" aria-live="polite"></div>
-    </form>
-
-    <footer class="foot muted">© Learn Student Site</footer>
+    <div id="notice"></div>
   </main>
 
   <script src="script.js"></script>
