@@ -1,69 +1,58 @@
 <!doctype html>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Student Signup — Demo</title>
-<link rel="stylesheet" href="style.css" />
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Signup — Learn Student Site</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<main class="container">
-<header class="brand">
-<h1>Student Signup</h1>
-<p class="muted">Create an account to access course materials</p>
-</header>
+  <main class="container">
+    <header class="brand">
+      <h1>Student Signup</h1>
+      <p class="muted">Create an account to access your courses</p>
+    </header>
 
+    <form id="signupForm" class="card" autocomplete="on" novalidate>
+      <div class="field">
+        <label for="fullname">Full name</label>
+        <input id="fullname" name="fullname" type="text" required minlength="2" placeholder="Jane Doe" />
+        <small class="error" data-for="fullname"></small>
+      </div>
 
-<form id="signupForm" class="card" autocomplete="on" novalidate>
-<div class="field">
-<label for="fullname">Full name</label>
-<input id="fullname" name="fullname" type="text" required minlength="2" placeholder="Jane Doe" />
-<small class="error" data-for="fullname"></small>
-</div>
+      <div class="field">
+        <label for="email">Email address</label>
+        <input id="email" name="email" type="email" required placeholder="you@example.com" />
+        <small class="error" data-for="email"></small>
+      </div>
 
+      <div class="field">
+        <label for="password">Password</label>
+        <div class="password-row">
+          <input id="password" name="password" type="password" required minlength="8" placeholder="At least 8 characters" />
+          <button type="button" id="togglePwd" aria-label="Show password">👁️</button>
+        </div>
+        <meter id="pwdStrength" min="0" max="4" value="0"></meter>
+        <small class="muted">Use letters, numbers &amp; symbols.</small>
+        <small class="error" data-for="password"></small>
+      </div>
 
-<div class="field">
-<label for="email">Email address</label>
-<input id="email" name="email" type="email" required placeholder="you@example.com" />
-<small class="error" data-for="email"></small>
-</div>
+      <div class="field">
+        <label for="confirm">Confirm password</label>
+        <input id="confirm" name="confirm" type="password" required placeholder="Repeat password" />
+        <small class="error" data-for="confirm"></small>
+      </div>
 
+      <div class="actions">
+        <button id="submitBtn" type="submit">Create account</button>
+      </div>
 
-<div class="field">
-<label for="password">Password</label>
-<div class="password-row">
-<input id="password" name="password" type="password" required minlength="8" placeholder="At least 8 characters" />
-<button type="button" id="togglePwd" aria-label="Show password">👁️</button>
-</div>
-<meter id="pwdStrength" min="0" max="4" value="0"></meter>
-<small class="muted">Use letters, numbers &amp; symbols.</small>
-<small class="error" data-for="password"></small>
-</div>
+      <div id="notice" role="status" aria-live="polite"></div>
+    </form>
 
+    <footer class="foot muted">© Learn Student Site</footer>
+  </main>
 
-<div class="field">
-<label for="confirm">Confirm password</label>
-<input id="confirm" name="confirm" type="password" required placeholder="Repeat password" />
-<small class="error" data-for="confirm"></small>
-</div>
-
-
-<div class="actions">
-<button id="submitBtn" type="submit">Create account</button>
-</div>
-
-
-<div id="notice" role="status" aria-live="polite"></div>
-</form>
-
-
-<section class="info card">
-<h2>Why this demo?</h2>
-<p class="muted">This page shows client-side validation and demonstrates hashing with the Web Crypto API (SHA-256) before saving to localStorage for learning only.</p>
-</section>
-
-
-<footer class="foot muted">Demo — not for production use</footer>
-</main>
-
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
